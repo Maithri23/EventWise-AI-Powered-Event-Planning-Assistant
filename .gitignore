@@ -1,0 +1,18 @@
+# Local frontend configuration (may contain environment-specific URLs)
+config.js
+.env
+.env.*
+!.env.example
+
+# Dependencies and generated files
+node_modules/
+dist/
+build/
+coverage/
+
+# Editor and operating system files
+.vscode/
+.idea/
+*.log
+.DS_Store
+Thumbs.db
