@@ -1,5 +1,5 @@
 # Local frontend configuration (may contain environment-specific URLs)
-config.js
+
 .env
 .env.*
 !.env.example
