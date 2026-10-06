@@ -1,0 +1,1713 @@
+{
+  "name": "EventWise Pro - Complete - eventwise_db",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "eventwise-pro-v2",
+        "responseMode": "responseNode",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Access-Control-Allow-Origin",
+                "value": "*"
+              },
+              {
+                "name": "Access-Control-Allow-Methods",
+                "value": "POST, OPTIONS"
+              },
+              {
+                "name": "Access-Control-Allow-Headers",
+                "value": "Content-Type, Authorization, X-Requested-With"
+              }
+            ]
+          }
+        }
+      },
+      "id": "9edc6804-fe8a-4610-999f-478d50dd4d09",
+      "name": "EventWise Pro Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "eventwise-pro-v2-webhook"
+    },
+    {
+      "parameters": {
+        "jsCode": "const body=$('EventWise Pro Webhook').item.json.body||$('EventWise Pro Webhook').item.json;\nconst action=String(body.action||'').trim().toLowerCase();\nreturn [{json:{action,request:body}}];"
+      },
+      "id": "3990be71-273b-458b-943b-a6e552cbd3a8",
+      "name": "Route Request",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        460,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{$json.action}}",
+                    "rightValue": "signup",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ]
+              },
+              "renameOutput": true,
+              "outputKey": "signup"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{$json.action}}",
+                    "rightValue": "login",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ]
+              },
+              "renameOutput": true,
+              "outputKey": "login"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{$json.action}}",
+                    "rightValue": "logout",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ]
+              },
+              "renameOutput": true,
+              "outputKey": "logout"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{$json.action}}",
+                    "rightValue": "get_plan",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ]
+              },
+              "renameOutput": true,
+              "outputKey": "get_plan"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{$json.action}}",
+                    "rightValue": "create_plan",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ]
+              },
+              "renameOutput": true,
+              "outputKey": "create_plan"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": false,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{$json.action}}",
+                    "rightValue": "update_plan",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ]
+              },
+              "renameOutput": true,
+              "outputKey": "update_plan"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra"
+        }
+      },
+      "id": "6accfc67-066b-40a8-9725-b45fdbde5201",
+      "name": "Action Router",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [
+        700,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "row",
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "mode": "name",
+          "value": "eventwise_db"
+        },
+        "limit": 1,
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "recordKey",
+              "keyValue": "={{String($('Route Request').item.json.request.email||'').trim().toLowerCase()}}",
+              "condition": "eq"
+            }
+          ]
+        },
+        "returnAll": false,
+        "options": {},
+        "alwaysOutputData": true
+      },
+      "id": "6d4afd41-eea1-403d-a367-ce6d3d9482cf",
+      "name": "Signup Lookup User",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        960,
+        -420
+      ],
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "const req=$('Route Request').item.json.request||{};\nconst existing=$json||{};\nconst name=String(req.name||'').trim(), email=String(req.email||'').trim().toLowerCase(), password=String(req.password||'');\nif(!name||!email||!password)throw new Error('Name, email and password are required.');\nif(!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email))throw new Error('Please enter a valid email.');\nif(password.length<6)throw new Error('Password must be at least 6 characters.');\nif(existing && existing.id && String(existing.recordKey||'')===email)throw new Error('An account with this email already exists.');\nfunction sha256(s) {\n  const H0=[1779033703,3144134277,1013904242,2773480762,1359893119,2600822924,528734635,1541459225];\n  const K=[1116352408, 1899447441, 3049323471, 3921009573, 961987163, 1508970993, 2453635748, 2870763221, 3624381080, 310598401, 607225278, 1426881987, 1925078388, 2162078206, 2614888103, 3248222580, 3835390401, 4022224774, 264347078, 604807628, 770255983, 1249150122, 1555081692, 1996064986, 2554220882, 2821834349, 2952996808, 3210313671, 3336571891, 3584528711, 113926993, 338241895, 666307205, 773529912, 1294757372, 1396182291, 1695183700, 1986661051, 2177026350, 2456956037, 2730485921, 2820302411, 3259730800, 3345764771, 3516065817, 3600352804, 4094571909, 275423344, 430227734, 506948616, 659060556, 883997877, 958139571, 1322822218, 1537002063, 1747873779, 1955562222, 2024104815, 2227730452, 2361852424, 2428436474, 2756734187, 3204031479, 3329325298];\n  function ro(x,n){return (x>>>n)|(x<<(32-n));}\n  const bytes=[];\n  for(let i=0;i<s.length;i++){const c=s.charCodeAt(i);if(c>255)throw new Error('Password contains unsupported characters.');bytes.push(c);}\n  const bitLen=bytes.length*8;bytes.push(128);while(bytes.length%64!==56)bytes.push(0);\n  for(let i=7;i>=0;i--)bytes.push((bitLen/Math.pow(2,8*i))&255);\n  let h=H0.slice();\n  for(let off=0;off<bytes.length;off+=64){\n    const w=new Array(64);\n    for(let i=0;i<16;i++){const p=off+i*4;w[i]=((bytes[p]<<24)|(bytes[p+1]<<16)|(bytes[p+2]<<8)|bytes[p+3])|0;}\n    for(let i=16;i<64;i++){const x=w[i-15],y=w[i-2];const s0=ro(x,7)^ro(x,18)^(x>>>3);const s1=ro(y,17)^ro(y,19)^(y>>>10);w[i]=(w[i-16]+s0+w[i-7]+s1)|0;}\n    let [a,b,c,d,e,f,g,hh]=h;\n    for(let i=0;i<64;i++){const S1=ro(e,6)^ro(e,11)^ro(e,25);const ch=(e&f)^((~e)&g);const t1=(hh+S1+ch+K[i]+w[i])|0;const S0=ro(a,2)^ro(a,13)^ro(a,22);const maj=(a&b)^(a&c)^(b&c);const t2=(S0+maj)|0;hh=g;g=f;f=e;e=(d+t1)|0;d=c;c=b;b=a;a=(t1+t2)|0;}\n    h=[(h[0]+a)|0,(h[1]+b)|0,(h[2]+c)|0,(h[3]+d)|0,(h[4]+e)|0,(h[5]+f)|0,(h[6]+g)|0,(h[7]+hh)|0];\n  }\n  return h.map(x=>(x>>>0).toString(16).padStart(8,'0')).join('');\n}\nconst now=new Date().toISOString();\nconst user={id:'usr_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,8),name,email,passwordHash:sha256(password),createdAt:now};\nconst token='sess_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2)+'_'+Math.random().toString(36).slice(2);\nconst session={userId:user.id,email,createdAt:now};\nreturn [{json:{email,user,token,session,now,response:{success:true,action:'signup',message:'Account created successfully.',token,user:{name,email},plan:null}}}];"
+      },
+      "id": "c0afd045-626e-4341-ad0b-dc4238db446a",
+      "name": "Signup Prepare",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1200,
+        -420
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "row",
+        "operation": "insert",
+        "dataTableId": {
+          "__rl": true,
+          "mode": "name",
+          "value": "eventwise_db"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "recordKey": "={{$('Signup Prepare').item.json.email}}",
+            "data": "={{JSON.stringify($('Signup Prepare').item.json.user)}}",
+            "version": "1"
+          },
+          "schema": [
+            {
+              "id": "recordKey",
+              "displayName": "recordKey",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "data",
+              "displayName": "data",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "version",
+              "displayName": "version",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "matchingColumns": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "9fc6818b-260c-46f5-8221-b487b4d322e2",
+      "name": "Insert Signup User",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        1440,
+        -420
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "row",
+        "operation": "insert",
+        "dataTableId": {
+          "__rl": true,
+          "mode": "name",
+          "value": "eventwise_db"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "recordKey": "={{$('Signup Prepare').item.json.token}}",
+            "data": "={{JSON.stringify($('Signup Prepare').item.json.session)}}",
+            "version": "1"
+          },
+          "schema": [
+            {
+              "id": "recordKey",
+              "displayName": "recordKey",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "data",
+              "displayName": "data",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "version",
+              "displayName": "version",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "matchingColumns": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "029e1fe5-ba57-413b-8531-489fcedad9e2",
+      "name": "Insert Signup Session",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        1680,
+        -420
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{json:$('Signup Prepare').item.json.response}];"
+      },
+      "id": "7c51c919-6db0-4bb1-9a00-2aba0fca3b6c",
+      "name": "Signup Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1920,
+        -420
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "row",
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "mode": "name",
+          "value": "eventwise_db"
+        },
+        "limit": 1,
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "recordKey",
+              "keyValue": "={{String($('Route Request').item.json.request.email||'').trim().toLowerCase()}}",
+              "condition": "eq"
+            }
+          ]
+        },
+        "returnAll": false,
+        "options": {},
+        "alwaysOutputData": true
+      },
+      "id": "07ce9816-a862-4585-a0dd-a2cabf94f69a",
+      "name": "Login Lookup User",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        960,
+        -260
+      ],
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "const req=$('Route Request').item.json.request||{};\nconst row=$json||{};\nconst email=String(req.email||'').trim().toLowerCase(), password=String(req.password||'');\nif(!email||!password)throw new Error('Email and password are required.');\nif(!row.id || String(row.recordKey||'')!==email || !row.data)throw new Error('Invalid email or password.');\nlet user;try{user=JSON.parse(row.data);}catch(e){throw new Error('Stored user record is invalid.');}\nfunction sha256(s) {\n  const H0=[1779033703,3144134277,1013904242,2773480762,1359893119,2600822924,528734635,1541459225];\n  const K=[1116352408, 1899447441, 3049323471, 3921009573, 961987163, 1508970993, 2453635748, 2870763221, 3624381080, 310598401, 607225278, 1426881987, 1925078388, 2162078206, 2614888103, 3248222580, 3835390401, 4022224774, 264347078, 604807628, 770255983, 1249150122, 1555081692, 1996064986, 2554220882, 2821834349, 2952996808, 3210313671, 3336571891, 3584528711, 113926993, 338241895, 666307205, 773529912, 1294757372, 1396182291, 1695183700, 1986661051, 2177026350, 2456956037, 2730485921, 2820302411, 3259730800, 3345764771, 3516065817, 3600352804, 4094571909, 275423344, 430227734, 506948616, 659060556, 883997877, 958139571, 1322822218, 1537002063, 1747873779, 1955562222, 2024104815, 2227730452, 2361852424, 2428436474, 2756734187, 3204031479, 3329325298];\n  function ro(x,n){return (x>>>n)|(x<<(32-n));}\n  const bytes=[];\n  for(let i=0;i<s.length;i++){const c=s.charCodeAt(i);if(c>255)throw new Error('Password contains unsupported characters.');bytes.push(c);}\n  const bitLen=bytes.length*8;bytes.push(128);while(bytes.length%64!==56)bytes.push(0);\n  for(let i=7;i>=0;i--)bytes.push((bitLen/Math.pow(2,8*i))&255);\n  let h=H0.slice();\n  for(let off=0;off<bytes.length;off+=64){\n    const w=new Array(64);\n    for(let i=0;i<16;i++){const p=off+i*4;w[i]=((bytes[p]<<24)|(bytes[p+1]<<16)|(bytes[p+2]<<8)|bytes[p+3])|0;}\n    for(let i=16;i<64;i++){const x=w[i-15],y=w[i-2];const s0=ro(x,7)^ro(x,18)^(x>>>3);const s1=ro(y,17)^ro(y,19)^(y>>>10);w[i]=(w[i-16]+s0+w[i-7]+s1)|0;}\n    let [a,b,c,d,e,f,g,hh]=h;\n    for(let i=0;i<64;i++){const S1=ro(e,6)^ro(e,11)^ro(e,25);const ch=(e&f)^((~e)&g);const t1=(hh+S1+ch+K[i]+w[i])|0;const S0=ro(a,2)^ro(a,13)^ro(a,22);const maj=(a&b)^(a&c)^(b&c);const t2=(S0+maj)|0;hh=g;g=f;f=e;e=(d+t1)|0;d=c;c=b;b=a;a=(t1+t2)|0;}\n    h=[(h[0]+a)|0,(h[1]+b)|0,(h[2]+c)|0,(h[3]+d)|0,(h[4]+e)|0,(h[5]+f)|0,(h[6]+g)|0,(h[7]+hh)|0];\n  }\n  return h.map(x=>(x>>>0).toString(16).padStart(8,'0')).join('');\n}\nif(sha256(password)!==user.passwordHash)throw new Error('Invalid email or password.');\nconst now=new Date().toISOString();\nconst token='sess_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2)+'_'+Math.random().toString(36).slice(2);\nconst session={userId:user.id,email,createdAt:now};\nreturn [{json:{token,session,user,now}}];"
+      },
+      "id": "ce888daa-a31d-4023-b07a-e09a66d9894f",
+      "name": "Login Prepare",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1200,
+        -260
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "row",
+        "operation": "insert",
+        "dataTableId": {
+          "__rl": true,
+          "mode": "name",
+          "value": "eventwise_db"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "recordKey": "={{$('Login Prepare').item.json.token}}",
+            "data": "={{JSON.stringify($('Login Prepare').item.json.session)}}",
+            "version": "1"
+          },
+          "schema": [
+            {
+              "id": "recordKey",
+              "displayName": "recordKey",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "data",
+              "displayName": "data",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "version",
+              "displayName": "version",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "matchingColumns": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "3fdeb9c7-0d25-4ca9-87c1-bc64267741ff",
+      "name": "Insert Login Session",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        1440,
+        -260
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "row",
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "mode": "name",
+          "value": "eventwise_db"
+        },
+        "limit": 1,
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "recordKey",
+              "keyValue": "={{$('Login Prepare').item.json.user.id}}",
+              "condition": "eq"
+            }
+          ]
+        },
+        "returnAll": false,
+        "options": {},
+        "alwaysOutputData": true
+      },
+      "id": "ab51576c-8377-4118-a5ae-eaaa4ec5f9ad",
+      "name": "Login Lookup Saved Plan",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        1680,
+        -260
+      ],
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "const row=$json||{};let plan=null,version=0,updatedAt=null;\nif(row && row.id && row.data){try{plan=JSON.parse(row.data);}catch(e){plan=null;}version=Number(row.version||0);updatedAt=row.updatedAt||null;}\nconst u=$('Login Prepare').item.json.user,t=$('Login Prepare').item.json.token;\nreturn [{json:{success:true,action:'login',message:'Login successful.',token:t,user:{name:u.name,email:u.email},plan,version,updatedAt}}];"
+      },
+      "id": "2c736919-3408-4f83-a734-5655f2fd8579",
+      "name": "Login Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1920,
+        -260
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "row",
+        "operation": "deleteRows",
+        "dataTableId": {
+          "__rl": true,
+          "mode": "name",
+          "value": "eventwise_db"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "recordKey",
+              "keyValue": "={{String($('Route Request').item.json.request.token||'')}}",
+              "condition": "eq"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "5f395ddc-d143-42ac-ba62-f34b0559c208",
+      "name": "Delete Logout Session",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        960,
+        -100
+      ],
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{json:{success:true,action:'logout',message:'Logged out successfully.'}}];"
+      },
+      "id": "b87f149f-554e-4e35-aa0b-9f9987937c83",
+      "name": "Logout Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1200,
+        -100
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "row",
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "mode": "name",
+          "value": "eventwise_db"
+        },
+        "limit": 1,
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "recordKey",
+              "keyValue": "={{String($('Route Request').item.json.request.token||'')}}",
+              "condition": "eq"
+            }
+          ]
+        },
+        "returnAll": false,
+        "options": {},
+        "alwaysOutputData": true
+      },
+      "id": "f4154b3f-57da-459e-9127-0129a9c05024",
+      "name": "Get Plan Session",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        960,
+        60
+      ],
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "const row=$json||{};if(!row.id || !row.data)throw new Error('Invalid or expired session token.');\nlet session;try{session=JSON.parse(row.data);}catch(e){throw new Error('Stored session record is invalid.');}\nreturn [{json:{userId:session.userId,email:session.email}}];"
+      },
+      "id": "6fa7ffc1-4c72-4f8f-8cf9-15abf6a93c77",
+      "name": "Get Plan Auth",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1200,
+        60
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "row",
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "mode": "name",
+          "value": "eventwise_db"
+        },
+        "limit": 1,
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "recordKey",
+              "keyValue": "={{$('Get Plan Auth').item.json.userId}}",
+              "condition": "eq"
+            }
+          ]
+        },
+        "returnAll": false,
+        "options": {},
+        "alwaysOutputData": true
+      },
+      "id": "22cadaba-aa47-41d2-b59a-d4fe765450b4",
+      "name": "Get Saved Plan Row",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        1440,
+        60
+      ],
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "const row=$json||{};let plan=null,version=0,updatedAt=null;\nif(row && row.id && row.data){try{plan=JSON.parse(row.data);}catch(e){throw new Error('Stored plan is invalid JSON.');}version=Number(row.version||0);updatedAt=row.updatedAt||null;}\nreturn [{json:{success:true,action:'get_plan',plan,version,updatedAt}}];"
+      },
+      "id": "ca1d5156-5c57-44f0-9b05-a87583ab1917",
+      "name": "Get Plan Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1680,
+        60
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const req=$('Route Request').item.json.request||{};const token=String(req.token||'');const eventType=String(req.eventType||'').trim();const guests=Number(req.guests);const location=String(req.location||'').trim();const date=String(req.date||'').trim();const budget=Number(req.budget);const preferences=String(req.preferences||'').trim();\nif(!token)throw new Error('Login required.');if(!eventType||!location||!date||!preferences)throw new Error('eventType, location, date and preferences are required.');if(!Number.isFinite(guests)||guests<1||!Number.isInteger(guests))throw new Error('Guests must be a positive integer.');if(!Number.isFinite(budget)||budget<=0)throw new Error('Budget must be greater than 0.');\nreturn [{json:{token,event:{eventType,guests,location,date,budget,preferences}}}];"
+      },
+      "id": "95ff238f-2971-43ea-b978-8fd40ec8098f",
+      "name": "Create Plan Request",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        960,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "row",
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "mode": "name",
+          "value": "eventwise_db"
+        },
+        "limit": 1,
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "recordKey",
+              "keyValue": "={{$('Create Plan Request').item.json.token}}",
+              "condition": "eq"
+            }
+          ]
+        },
+        "returnAll": false,
+        "options": {},
+        "alwaysOutputData": true
+      },
+      "id": "1f9347ff-bad5-4c87-8e1d-02a59383dbc8",
+      "name": "Create Plan Session",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        1200,
+        260
+      ],
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "const row=$json||{};if(!row.id || !row.data)throw new Error('Invalid or expired session token. Please login again.');\nlet session;try{session=JSON.parse(row.data);}catch(e){throw new Error('Stored session record is invalid.');}\nconst base=$('Create Plan Request').item.json;return [{json:{token:base.token,userId:session.userId,email:session.email,event:base.event}}];"
+      },
+      "id": "331fa775-a23e-49fd-a792-a5c96f135f2b",
+      "name": "Create Plan Auth",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1440,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "row",
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "mode": "name",
+          "value": "eventwise_db"
+        },
+        "limit": 1,
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "recordKey",
+              "keyValue": "={{$('Create Plan Auth').item.json.userId}}",
+              "condition": "eq"
+            }
+          ]
+        },
+        "returnAll": false,
+        "options": {},
+        "alwaysOutputData": true
+      },
+      "id": "a75e3bd0-1720-413f-a83a-bec8d727de20",
+      "name": "Get Existing Plan Before Create",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        1680,
+        420
+      ],
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "https://geocoding-api.open-meteo.com/v1/search",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "name",
+              "value": "={{$('Create Plan Auth').item.json.event.location}}"
+            },
+            {
+              "name": "count",
+              "value": "1"
+            },
+            {
+              "name": "language",
+              "value": "en"
+            },
+            {
+              "name": "format",
+              "value": "json"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "66391c0f-1de2-4229-8cca-dc5568fb0641",
+      "name": "Geocode Event Location",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1680,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const results=$json.results||[];if(!results.length)throw new Error('Location could not be found. Please enter a city or valid location.');\nconst r=results[0],base=$('Create Plan Auth').item.json;return [{json:{...base,geo:{latitude:r.latitude,longitude:r.longitude,name:r.name,country:r.country||'',timezone:r.timezone||''}}}];"
+      },
+      "id": "0475bc37-e0d3-4919-8acc-f6c6542a68c1",
+      "name": "Validate Location",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1920,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "https://api.open-meteo.com/v1/forecast",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "latitude",
+              "value": "={{$json.geo.latitude}}"
+            },
+            {
+              "name": "longitude",
+              "value": "={{$json.geo.longitude}}"
+            },
+            {
+              "name": "current",
+              "value": "temperature_2m,relative_humidity_2m,precipitation,weather_code,wind_speed_10m"
+            },
+            {
+              "name": "daily",
+              "value": "weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,precipitation_sum"
+            },
+            {
+              "name": "forecast_days",
+              "value": "16"
+            },
+            {
+              "name": "timezone",
+              "value": "auto"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "fc47d95f-3345-4d45-a375-548a740e0923",
+      "name": "Get Event Weather",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2160,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const event=$('Validate Location').item.json;const weather=$json;\nconst system=`You are EventWise, an expert event planning assistant. Create one complete, practical and realistic event plan.\nReturn ONLY one valid JSON object. Do not use markdown, code fences or commentary.\nDo not invent exact weather for dates outside the supplied forecast. Clearly say when the event date is outside the forecast range.\nKeep the budget approximately within the user's stated budget.\nAll arrays/objects requested below must be present, even if an array is empty.`;\nconst user=`Plan this event:\n\nEVENT:\n${JSON.stringify(event.event)}\n\nLOCATION:\n${JSON.stringify(event.geo)}\n\nWEATHER DATA:\n${JSON.stringify(weather)}\n\nReturn exactly this JSON structure:\n{\n  \"event_summary\":\"string\",\n  \"budget\":{\"venue\":0,\"food\":0,\"decoration\":0,\"entertainment\":0,\"cake_or_refreshments\":0,\"miscellaneous\":0,\"total_estimate\":0,\"status\":\"Within budget|Near budget|Over budget\",\"savings_suggestions\":[\"string\"]},\n  \"schedule\":[{\"time\":\"string\",\"activity\":\"string\"}],\n  \"checklist\":[{\"task\":\"string\",\"priority\":\"High|Medium|Low\",\"category\":\"string\",\"due_phase\":\"string\"}],\n  \"recommendations\":[\"string\"],\n  \"weather_advice\":{\"condition\":\"string\",\"outdoor_suitability\":\"Suitable|Partly suitable|Not suitable|Forecast unavailable\",\"advice\":\"string\"},\n  \"risks\":[{\"risk\":\"string\",\"severity\":\"High|Medium|Low\",\"trigger\":\"string\",\"mitigation\":\"string\",\"backup_plan\":\"string\"}],\n  \"guest_experience\":{\"seating\":\"string\",\"food\":\"string\",\"activities\":[\"string\"],\"accessibility\":[\"string\"],\"guest_flow\":\"string\"},\n  \"vendor_requirements\":[{\"category\":\"string\",\"required\":true,\"quantity_or_scope\":\"string\",\"preparation_deadline\":\"string\"}],\n  \"readiness\":{\"score\":0,\"status\":\"string\",\"missing_critical_tasks\":[\"string\"]},\n  \"alternative_plans\":{\"budget_plan\":\"string\",\"recommended_plan\":\"string\",\"premium_plan\":\"string\"},\n  \"cost_saving_plan\":{\"target_reduction_percent\":20,\"suggestions\":[\"string\"]},\n  \"event_day_run_sheet\":[{\"time\":\"string\",\"owner\":\"string\",\"task\":\"string\"}],\n  \"image_search_terms\":[\"string\"],\n  \"metadata\":{\"generated_at\":\"${new Date().toISOString()}\",\"version\":1}\n}\n\nImportant:\n- Generate useful numbers for every budget category and make total_estimate equal their sum.\n- Food should consider guest count.\n- Schedule should cover preparation/setup, event, and wrap-up.\n- Checklist should include bookings, permits if relevant, payments, invitations, supplies and contingency items where appropriate.\n- Risk planning must include weather, budget, vendor and attendance risks when relevant.\n- Alternative plans must be clearly different.\n- image_search_terms should contain 4-6 concise search terms based on the event type and style.\n- preparation_deadline values must be on or after today and before the event date.\n- If weather forecast does not cover the event date, set outdoor_suitability to \"Forecast unavailable\" and say so.\n- Adapt the plan to ANY event type; do not assume birthday or wedding.`;\nreturn [{json:{event,weather,groqBody:{model:\"openai/gpt-oss-20b\",temperature:0.2,max_tokens:5000,response_format:{type:\"json_object\"},messages:[{role:\"system\",content:system},{role:\"user\",content:user}]}}}];"
+      },
+      "id": "c38b3a9d-8c3d-4a0c-81c6-60bf05bf3b85",
+      "name": "Build Groq Request",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2400,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.groq.com/openai/v1/chat/completions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer PASTE_YOUR_GROQ_API_KEY_HERE"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{JSON.stringify($json.groqBody)}}",
+        "options": {
+          "timeout": 120000
+        }
+      },
+      "id": "55df014d-1650-46ff-8b36-6594d61c4786",
+      "name": "Groq - Complete Event Plan",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2640,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const content=$json.choices?.[0]?.message?.content;if(!content)throw new Error('Groq returned no content.');\nlet plan;try{plan=typeof content==='string'?JSON.parse(content.trim().replace(/^```json\\s*/i,'').replace(/^```\\s*/i,'').replace(/```$/i,'').trim()):content;}catch(e){throw new Error('Groq returned invalid JSON: '+String(content).slice(0,1000));}\nconst base=$('Build Groq Request').item.json,auth=$('Create Plan Auth').item.json,existing=$('Get Existing Plan Before Create').item.json||{};const version=(existing && existing.id && existing.data?Number(existing.version||0):0)+1;const updatedAt=new Date().toISOString();const savedPlan={...plan,event:base.event.event,location:base.event.geo,weather:base.weather,metadata:{...(plan.metadata||{}),generated_at:updatedAt,version}};\nreturn [{json:{userId:auth.userId,plan:savedPlan,version,updatedAt,response:{success:true,action:'create_plan',plan:savedPlan,version,updatedAt}}}];"
+      },
+      "id": "18c0d840-9fc4-4a27-bc9d-0da1abd7cf43",
+      "name": "Prepare Saved Plan",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2880,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "row",
+        "operation": "upsert",
+        "dataTableId": {
+          "__rl": true,
+          "mode": "name",
+          "value": "eventwise_db"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "recordKey",
+              "keyValue": "={{$('Prepare Saved Plan').item.json.userId}}",
+              "condition": "eq"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "recordKey": "={{$('Prepare Saved Plan').item.json.userId}}",
+            "data": "={{JSON.stringify($('Prepare Saved Plan').item.json.plan)}}",
+            "version": "={{String($('Prepare Saved Plan').item.json.version)}}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "recordKey",
+              "displayName": "recordKey",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "data",
+              "displayName": "data",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "version",
+              "displayName": "version",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "f1f3b59d-ffed-4993-930d-8263fea48846",
+      "name": "Save Complete Plan",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        3120,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{json:$('Prepare Saved Plan').item.json.response}];"
+      },
+      "id": "b5ef3fb1-42ce-4aa4-8dbc-02e5b29a98d9",
+      "name": "Create Plan Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3360,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const req=$('Route Request').item.json.request||{};const token=String(req.token||'');if(!token)throw new Error('Login required.');if(!req.plan||typeof req.plan!=='object')throw new Error('A plan object is required.');return [{json:{token,plan:req.plan}}];"
+      },
+      "id": "bfe3f895-2095-4c55-bc14-5a22dd879d8c",
+      "name": "Update Plan Request",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        960,
+        520
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "row",
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "mode": "name",
+          "value": "eventwise_db"
+        },
+        "limit": 1,
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "recordKey",
+              "keyValue": "={{$('Update Plan Request').item.json.token}}",
+              "condition": "eq"
+            }
+          ]
+        },
+        "returnAll": false,
+        "options": {},
+        "alwaysOutputData": true
+      },
+      "id": "3b1e3de7-0df4-4caa-9f5d-9122a64d345f",
+      "name": "Update Plan Session",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        1200,
+        520
+      ],
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "const row=$json||{};if(!row.id || !row.data)throw new Error('Invalid or expired session token. Please login again.');let session;try{session=JSON.parse(row.data);}catch(e){throw new Error('Stored session record is invalid.');}const base=$('Update Plan Request').item.json;return [{json:{userId:session.userId,plan:base.plan}}];"
+      },
+      "id": "6f7e7974-1625-41b9-a88b-4688c0d41135",
+      "name": "Update Plan Auth",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1440,
+        520
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "row",
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "mode": "name",
+          "value": "eventwise_db"
+        },
+        "limit": 1,
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "recordKey",
+              "keyValue": "={{$('Update Plan Auth').item.json.userId}}",
+              "condition": "eq"
+            }
+          ]
+        },
+        "returnAll": false,
+        "options": {},
+        "alwaysOutputData": true
+      },
+      "id": "c5ca7cc3-5d19-4c75-8396-80032ac43d45",
+      "name": "Get Existing Plan For Update",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        1680,
+        520
+      ],
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "const row=$json||{},base=$('Update Plan Auth').item.json;const version=(row && row.id && row.data?Number(row.version||0):0)+1;const updatedAt=new Date().toISOString();const plan={...base.plan,metadata:{...(base.plan.metadata||{}),generated_at:updatedAt,version}};return [{json:{userId:base.userId,plan,version,updatedAt,response:{success:true,action:'update_plan',message:'Plan updated successfully.',plan,version,updatedAt}}}];"
+      },
+      "id": "4bb74f05-cadc-416c-9c46-ddc8637349cd",
+      "name": "Prepare Updated Plan",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1920,
+        520
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "row",
+        "operation": "upsert",
+        "dataTableId": {
+          "__rl": true,
+          "mode": "name",
+          "value": "eventwise_db"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "recordKey",
+              "keyValue": "={{$('Prepare Updated Plan').item.json.userId}}",
+              "condition": "eq"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "recordKey": "={{$('Prepare Updated Plan').item.json.userId}}",
+            "data": "={{JSON.stringify($('Prepare Updated Plan').item.json.plan)}}",
+            "version": "={{String($('Prepare Updated Plan').item.json.version)}}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "recordKey",
+              "displayName": "recordKey",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "data",
+              "displayName": "data",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "version",
+              "displayName": "version",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "0bf68644-73ac-4ce1-a5f1-c77cea389d8e",
+      "name": "Update Saved Plan",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        2160,
+        520
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{json:$('Prepare Updated Plan').item.json.response}];"
+      },
+      "id": "05b81aef-0de6-49cb-8409-005a7aae73de",
+      "name": "Update Plan Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2400,
+        520
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{json:{success:false,error:'Invalid action. Use signup, login, logout, get_plan, create_plan or update_plan.'}}];"
+      },
+      "id": "99f02c59-d3fc-4237-8fac-fe44775ec759",
+      "name": "Invalid Action Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        960,
+        680
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{$json}}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "id": "596e570f-6896-4a9a-b1b7-4898cdd066e4",
+      "name": "Respond to Frontend",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        3600,
+        0
+      ]
+    }
+  ],
+  "connections": {
+    "Route Request": {
+      "main": [
+        [
+          {
+            "node": "Action Router",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Action Router": {
+      "main": [
+        [
+          {
+            "node": "Signup Lookup User",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Login Lookup User",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Delete Logout Session",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get Plan Session",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Create Plan Request",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update Plan Request",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Invalid Action Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Signup Lookup User": {
+      "main": [
+        [
+          {
+            "node": "Signup Prepare",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Signup Prepare": {
+      "main": [
+        [
+          {
+            "node": "Insert Signup User",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert Signup User": {
+      "main": [
+        [
+          {
+            "node": "Insert Signup Session",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert Signup Session": {
+      "main": [
+        [
+          {
+            "node": "Signup Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Signup Response": {
+      "main": [
+        [
+          {
+            "node": "Respond to Frontend",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Login Lookup User": {
+      "main": [
+        [
+          {
+            "node": "Login Prepare",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Login Prepare": {
+      "main": [
+        [
+          {
+            "node": "Insert Login Session",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert Login Session": {
+      "main": [
+        [
+          {
+            "node": "Login Lookup Saved Plan",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Login Lookup Saved Plan": {
+      "main": [
+        [
+          {
+            "node": "Login Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Login Response": {
+      "main": [
+        [
+          {
+            "node": "Respond to Frontend",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Delete Logout Session": {
+      "main": [
+        [
+          {
+            "node": "Logout Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Logout Response": {
+      "main": [
+        [
+          {
+            "node": "Respond to Frontend",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Plan Session": {
+      "main": [
+        [
+          {
+            "node": "Get Plan Auth",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Plan Auth": {
+      "main": [
+        [
+          {
+            "node": "Get Saved Plan Row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Saved Plan Row": {
+      "main": [
+        [
+          {
+            "node": "Get Plan Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Plan Response": {
+      "main": [
+        [
+          {
+            "node": "Respond to Frontend",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Plan Request": {
+      "main": [
+        [
+          {
+            "node": "Create Plan Session",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Plan Session": {
+      "main": [
+        [
+          {
+            "node": "Create Plan Auth",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Plan Auth": {
+      "main": [
+        [
+          {
+            "node": "Get Existing Plan Before Create",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Existing Plan Before Create": {
+      "main": [
+        [
+          {
+            "node": "Geocode Event Location",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Geocode Event Location": {
+      "main": [
+        [
+          {
+            "node": "Validate Location",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate Location": {
+      "main": [
+        [
+          {
+            "node": "Get Event Weather",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Event Weather": {
+      "main": [
+        [
+          {
+            "node": "Build Groq Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Groq Request": {
+      "main": [
+        [
+          {
+            "node": "Groq - Complete Event Plan",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq - Complete Event Plan": {
+      "main": [
+        [
+          {
+            "node": "Prepare Saved Plan",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Saved Plan": {
+      "main": [
+        [
+          {
+            "node": "Save Complete Plan",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save Complete Plan": {
+      "main": [
+        [
+          {
+            "node": "Create Plan Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Plan Response": {
+      "main": [
+        [
+          {
+            "node": "Respond to Frontend",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Plan Request": {
+      "main": [
+        [
+          {
+            "node": "Update Plan Session",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Plan Session": {
+      "main": [
+        [
+          {
+            "node": "Update Plan Auth",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Plan Auth": {
+      "main": [
+        [
+          {
+            "node": "Get Existing Plan For Update",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Existing Plan For Update": {
+      "main": [
+        [
+          {
+            "node": "Prepare Updated Plan",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Updated Plan": {
+      "main": [
+        [
+          {
+            "node": "Update Saved Plan",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Saved Plan": {
+      "main": [
+        [
+          {
+            "node": "Update Plan Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Plan Response": {
+      "main": [
+        [
+          {
+            "node": "Respond to Frontend",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Invalid Action Response": {
+      "main": [
+        [
+          {
+            "node": "Respond to Frontend",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "EventWise Pro Webhook": {
+      "main": [
+        [
+          {
+            "node": "Route Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true
+  }
+}
