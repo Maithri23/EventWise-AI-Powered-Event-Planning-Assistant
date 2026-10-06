@@ -32,10 +32,6 @@ This is a static site. Serve the folder through any local web server, then open 
 
 `config.js` is ignored by Git so a private deployment URL can stay local. Do not commit credentials, API keys, tokens, or production secrets.
 
-## Is the n8n JSON okay to include?
-
-Yes. The workflow JSON is included deliberately so the automation can be imported and reproduced. Before sharing the repository publicly, review it for embedded credentials, webhook URLs, database details, or personally identifiable data. Exported credentials are normally not included by n8n, but connection names and configuration values may still reveal deployment information.
-
 ## Workflow contract
 
 The frontend sends JSON `POST` requests to the configured webhook. It uses actions such as `signup`, `login`, `create_plan`, `get_plan`, and `update_plan`; workflow responses should be JSON and include `success`, plus the appropriate user, token, plan, version, and message fields.
